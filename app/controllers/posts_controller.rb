@@ -6,6 +6,25 @@ class PostsController < ApplicationController
     @post = Post.new
   end
 
+  def edit
+    @group = Post.find(params[:id])
+
+    if current_user != @group.user
+      redirect_to root_path, alert: "You have no permission."
+    end
+  end
+
+  def destroy
+    @group = Post.find(params[:id])
+    if current_user != @group.user
+      redirect_to root_path, alert: "You have no permission."
+    end
+    @group.destroy
+    redirect_to groups_path,alert: "Group deleted"
+  end
+
+
+
   def create
     @group = Group.find(params[:group_id])
     @post = Post.new(post_params)
